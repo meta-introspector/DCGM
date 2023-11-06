@@ -106,4 +106,70 @@ including information on how to set the Linux Kernel Paranoid Level.
 #+end_example
 
 
- 
+#+begin_src sh :results verbatim
+ sudo nsys status -e
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Timestamp counter supported: Yes
+
+CPU Profiling Environment Check
+Root privilege: enabled
+Linux Kernel Paranoid Level = 4
+Linux Distribution = Ubuntu
+Linux Kernel Version = 6.2.0-35-generic: OK
+Linux perf_event_open syscall available: OK
+Sampling trigger event available: OK
+Intel(c) Last Branch Record support: Available
+CPU Profiling Environment (process-tree): OK
+CPU Profiling Environment (system-wide): OK
+
+See the product documentation at https://docs.nvidia.com/nsight-systems for more information,
+including information on how to set the Linux Kernel Paranoid Level.
+#+end_example
+
+This script uses the nsys command-line tool to check the system's profiling environment. The output shows that various components, such as the timestamp counter, CPU profiling, and last branch record support, are available on the system. Additionally, the Linux kernel version and paranoid level are also checked and reported. Finally, a link to the product documentation is provided for more information on how to configure the profiling environment.
+
+To use NVIDIA Nsight Systems (nsys) to check the installation, list GPUs, and trace hotspots in your local CUDA processes on a GPU, you can follow these high-level commands:
+
+1. **Check Installation**:
+   - To check if Nsight Systems is installed, open a terminal and run:
+
+#+begin_src sh :results verbatim
+  nsys --version
+#+end_src
+
+#+RESULTS:
+: NVIDIA Nsight Systems version 2023.3.3.42-233333266658v0
+
+          ```
+
+2. **List GPUs**:
+   - To list the available GPUs on your system, run:
+
+#+begin_src sh :results verbatim
+
+sudo   nsys profile --gpu-metrics-device=help
+#+end_src
+
+#+RESULTS:
+: Possible --gpu-metrics-device values are:
+: 	0: NVIDIA GeForce RTX 3080 Ti PCI[0000:01:00.0]
+: 	all: Select all supported GPUs
+: 	none: Disable GPU Metrics [Default]
+
+
+    
+3. **Trace Hotspots**:
+   - To trace hotspots in your local CUDA processes on a specific GPU, you can use the following command:
+     ```
+     #+begin_src sh :results verbatim
+     sudo nsys profile --stats=true --force-overwrite true --trace=cuda,nvtx -o my_trace_report.qdrep 
+     #+end_src
+
+     #+RESULTS:
+
+     ```
+     Replace `./your_cuda_program` with the path to your CUDA application.
+
