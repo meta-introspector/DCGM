@@ -1,0 +1,109 @@
+#+begin_src sh
+./cmakebuild/dcgmi/dcgmi -v
+#+end_src
+
+#+RESULTS:
+| Version | :        | 3.2.6                            |                                                 |                  |                    |     |                 |     |     |   |          |     |   |        |
+| Build   | Date     | :                                | 2023-11-05                                      |                  |                    |     |                 |     |     |   |          |     |   |        |
+| Commit  | ID       | :                                | 202d2de71f84a8d1c422e556eaae9e98940353d2(dirty) |                  |                    |     |                 |     |     |   |          |     |   |        |
+| Branch  | Name     | :                                | master                                          |                  |                    |     |                 |     |     |   |          |     |   |        |
+| CPU     | Arch     | :                                | x86_64                                          |                  |                    |     |                 |     |     |   |          |     |   |        |
+| Build   | Platform | :                                | Linux                                           | 6.2.0-35-generic | #35~22.04.1-Ubuntu | SMP | PREEMPT_DYNAMIC | Fri | Oct | 6 | 10:23:26 | UTC | 2 | x86_64 |
+| CRC     | :        | 01834c49b4deea849e065c49489af313 |                                                 |                  |                    |     |                 |     |     |   |          |     |   |        |
+
+
+#+begin_src sh :results verbatim
+./cmakebuild/dcgmi/dcgmi topo
+#+end_src
+
+#+RESULTS:
+: Error: unable to establish a connection to the specified host: localhost
+: Error: Unable to connect to host engine. Host engine connection invalid/disconnected.
+
+Now we make install and export the local lib and run the backend
+
+#+begin_src sh :results verbatim
+  sudo su -
+  make install 
+  export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+  nv-hostengine 
+#+end_src
+
+Now we can see no results in a new way
+
+#+begin_src sh :results verbatim
+dcgmi topo
+#+end_src
+
+#+RESULTS:
+: Getting topology is not supported for group 2147483647
+
+
+#+begin_src sh :results verbatim
+  dcgmi diag -r DEBUG -j
+#+end_src
+
+#+RESULTS:
+: {
+: 	"DCGM GPU Diagnostic" : 
+: 	{
+: 		"runtime_error" : "Error when executing the diagnostic: The NVVS binary was not found in the specified location; please install it to /usr/share/nvidia-validation-suite/ or set environment variable NVVS_BIN_PATH to the directory containing nvvs. If you set NVVS_BIN_PATH, please restart the DCGM service (nv-hostengine) if it is active.\nNvvs stderr: \n\n",
+: 		"version" : "3.2.6"
+: 	}
+: }
+: 
+  
+#+begin_src sh :results verbatim
+  dcgmi diag -r {level} -j
+  dcgmi discovery -l
+  dcgmi fieldgroup -l
+  dcgmi group -l
+  dcgmi modules -l
+  dcgmi health -c -j
+  CUDA generator scenario:
+  /usr/bin/dcgmproftester11 --no-dcgm-validation -t {FieldID} -d 10
+  dcgmi dmon -e {ListOfFieldIDs} -c 15
+
+#+end_src
+
+
+#+begin_src sh :results verbatim
+dcgmi diag -r DEBUG -j
+#+end_src
+
+#+RESULTS:
+: {
+: 	"DCGM GPU Diagnostic" : 
+: 	{
+: 		"runtime_error" : "Plugins directory was not found.  Please check paths or use -p to set it.",
+: 		"version" : "3.2.6"
+: 	}
+: }
+: 
+
+
+#+begin_src sh :results verbatim
+ nsys status -e
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Timestamp counter supported: Yes
+
+CPU Profiling Environment Check
+Root privilege: disabled
+Linux Kernel Paranoid Level = 4
+Linux Distribution = Ubuntu
+Linux Kernel Version = 6.2.0-35-generic: OK
+Linux perf_event_open syscall available: Fail
+Sampling trigger event available: Fail
+Intel(c) Last Branch Record support: Not Available
+CPU Profiling Environment (process-tree): Fail
+CPU Profiling Environment (system-wide): Fail
+
+See the product documentation at https://docs.nvidia.com/nsight-systems for more information,
+including information on how to set the Linux Kernel Paranoid Level.
+#+end_example
+
+
+ 
