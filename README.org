@@ -1,3 +1,6 @@
+
+* dcgmi
+
 #+begin_src sh :results verbatim :exports both
 ./cmakebuild/dcgmi/dcgmi -v
 #+end_src
@@ -91,7 +94,13 @@ dcgmi diag -r DEBUG -j
 : }
 : 
 
+* nsys
 
+To use NVIDIA Nsight Systems (nsys) to check the installation,
+list GPUs, and trace hotspots in your local CUDA processes on a GPU,
+you can follow these high-level commands
+
+** nsys status
 #+begin_src sh :results verbatim :exports both
  nsys status -e
 #+end_src
@@ -139,11 +148,7 @@ See the product documentation at https://docs.nvidia.com/nsight-systems for more
 including information on how to set the Linux Kernel Paranoid Level.
 #+end_example
 
-
-To use NVIDIA Nsight Systems (nsys) to check the installation, list GPUs, and trace hotspots in your local CUDA processes on a GPU, you can follow these high-level commands:
-
-1. **Check Installation**:
-   - To check if Nsight Systems is installed, open a terminal and run:
+** nsys version
 
 #+begin_src sh :results verbatim :exports both
   nsys --version
@@ -153,7 +158,7 @@ To use NVIDIA Nsight Systems (nsys) to check the installation, list GPUs, and tr
 : NVIDIA Nsight Systems version 2023.3.3.42-233333266658v0
 
 
-2. **List GPUs**:
+** List GPUs
    - To list the available GPUs on your system, run:
 
 #+begin_src sh :results verbatim :exports both
@@ -169,7 +174,10 @@ sudo   nsys profile --gpu-metrics-device=help
 
 
     
-3. **Trace Hotspots**:
+** nsys Trace Hotspots
+
+Work in progress
+
    - To trace hotspots in your local CUDA processes on a specific GPU, you can use the following command:
 
 #+begin_src sh :results verbatim :exports both
@@ -179,5 +187,4 @@ sudo   nsys profile --gpu-metrics-device=help
      #+RESULTS:
 
 
-     Replace `./your_cuda_program` with the path to your CUDA application.
 
