@@ -1,28 +1,38 @@
-#+begin_src sh
+#+begin_src sh :results verbatim :capture both
 ./cmakebuild/dcgmi/dcgmi -v
 #+end_src
 
 #+RESULTS:
-| Version | :        | 3.2.6                            |                                                 |                  |                    |     |                 |     |     |   |          |     |   |        |
-| Build   | Date     | :                                | 2023-11-05                                      |                  |                    |     |                 |     |     |   |          |     |   |        |
-| Commit  | ID       | :                                | 202d2de71f84a8d1c422e556eaae9e98940353d2(dirty) |                  |                    |     |                 |     |     |   |          |     |   |        |
-| Branch  | Name     | :                                | master                                          |                  |                    |     |                 |     |     |   |          |     |   |        |
-| CPU     | Arch     | :                                | x86_64                                          |                  |                    |     |                 |     |     |   |          |     |   |        |
-| Build   | Platform | :                                | Linux                                           | 6.2.0-35-generic | #35~22.04.1-Ubuntu | SMP | PREEMPT_DYNAMIC | Fri | Oct | 6 | 10:23:26 | UTC | 2 | x86_64 |
-| CRC     | :        | 01834c49b4deea849e065c49489af313 |                                                 |                  |                    |     |                 |     |     |   |          |     |   |        |
+#+begin_example
+Version : 3.2.6
+Build Date : 2023-11-05
+Commit ID : 282bb8f82139727248aabaf4cd069678d82eb0fa
+Branch Name : master
+CPU Arch : x86_64
+Build Platform : Linux 6.2.0-35-generic #35~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Oct  6 10:23:26 UTC 2 x86_64
+CRC : 3438f2916bb85ae99e0fd7baffc77fdd
+
+Hostengine build info:
+Version : 3.2.6
+Build Date : 2023-11-05
+Commit ID : 282bb8f82139727248aabaf4cd069678d82eb0fa
+Branch Name : master
+CPU Arch : x86_64
+Build Platform : Linux 6.2.0-35-generic #35~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Oct  6 10:23:26 UTC 2 x86_64
+CRC : 3438f2916bb85ae99e0fd7baffc77fdd
+#+end_example
 
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
 ./cmakebuild/dcgmi/dcgmi topo
 #+end_src
 
 #+RESULTS:
-: Error: unable to establish a connection to the specified host: localhost
-: Error: Unable to connect to host engine. Host engine connection invalid/disconnected.
+: Getting topology is not supported for group 2147483647
 
 Now we make install and export the local lib and run the backend
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
   sudo su -
   make install 
   export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
@@ -31,7 +41,7 @@ Now we make install and export the local lib and run the backend
 
 Now we can see no results in a new way
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
 dcgmi topo
 #+end_src
 
@@ -39,7 +49,7 @@ dcgmi topo
 : Getting topology is not supported for group 2147483647
 
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
   dcgmi diag -r DEBUG -j
 #+end_src
 
@@ -53,7 +63,7 @@ dcgmi topo
 : }
 : 
   
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
   dcgmi diag -r {level} -j
   dcgmi discovery -l
   dcgmi fieldgroup -l
@@ -67,7 +77,7 @@ dcgmi topo
 #+end_src
 
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
 dcgmi diag -r DEBUG -j
 #+end_src
 
@@ -82,7 +92,7 @@ dcgmi diag -r DEBUG -j
 : 
 
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
  nsys status -e
 #+end_src
 
@@ -106,7 +116,7 @@ including information on how to set the Linux Kernel Paranoid Level.
 #+end_example
 
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
  sudo nsys status -e
 #+end_src
 
@@ -129,26 +139,24 @@ See the product documentation at https://docs.nvidia.com/nsight-systems for more
 including information on how to set the Linux Kernel Paranoid Level.
 #+end_example
 
-This script uses the nsys command-line tool to check the system's profiling environment. The output shows that various components, such as the timestamp counter, CPU profiling, and last branch record support, are available on the system. Additionally, the Linux kernel version and paranoid level are also checked and reported. Finally, a link to the product documentation is provided for more information on how to configure the profiling environment.
 
 To use NVIDIA Nsight Systems (nsys) to check the installation, list GPUs, and trace hotspots in your local CUDA processes on a GPU, you can follow these high-level commands:
 
 1. **Check Installation**:
    - To check if Nsight Systems is installed, open a terminal and run:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
   nsys --version
 #+end_src
 
 #+RESULTS:
 : NVIDIA Nsight Systems version 2023.3.3.42-233333266658v0
 
-          ```
 
 2. **List GPUs**:
    - To list the available GPUs on your system, run:
 
-#+begin_src sh :results verbatim
+#+begin_src sh :results verbatim :capture both
 
 sudo   nsys profile --gpu-metrics-device=help
 #+end_src
@@ -163,13 +171,13 @@ sudo   nsys profile --gpu-metrics-device=help
     
 3. **Trace Hotspots**:
    - To trace hotspots in your local CUDA processes on a specific GPU, you can use the following command:
-     ```
-     #+begin_src sh :results verbatim
-     sudo nsys profile --stats=true --force-overwrite true --trace=cuda,nvtx -o my_trace_report.qdrep 
-     #+end_src
+
+#+begin_src sh :results verbatim :capture both
+  sudo nsys profile --stats=true --force-overwrite true --trace=cuda,nvtx -o my_trace_report.qdrep 
+#+end_src
 
      #+RESULTS:
 
-     ```
+
      Replace `./your_cuda_program` with the path to your CUDA application.
 
